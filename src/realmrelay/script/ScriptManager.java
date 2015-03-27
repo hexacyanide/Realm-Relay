@@ -26,24 +26,23 @@ public class ScriptManager {
 
     public ScriptManager(User user) {
         this.user = user;
+        
         File folder = new File("scripts/");
         if (!folder.isDirectory()) {
             folder.mkdir();
         }
+        
         FilenameFilter filter = new FilenameFilter() {
             @Override
             public boolean accept(File dir, String name) {
                 int lastIndex = name.lastIndexOf(".");
-                if (lastIndex == -1) {
-                    return false;
-                }
+                if (lastIndex == -1) return false;
                 return name.substring(lastIndex).equalsIgnoreCase(".js");
             }
-
         };
         
         File[] files = folder.listFiles(filter);
-        Object scriptEvent = new ScriptEvent(this.user);
+        ScriptEvent scriptEvent = new ScriptEvent(this.user);
         for (File file : files) {
             ScriptEngine scriptEngine = new ScriptEngineManager().getEngineByName("JavaScript");
             try {
@@ -52,7 +51,7 @@ public class ScriptManager {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (ScriptException e) {
-                RealmRelay.error(e.getMessage());
+                RealmRelay.error(e.getMessage() + " in " + file.getName());
             }
             this.scripts.add((Invocable) scriptEngine);
         }
@@ -69,6 +68,7 @@ public class ScriptManager {
             ScheduledScriptEvent event = this.newScheduledEvents.remove(0);
             this.scheduledEvents.add(event);
         }
+        
         Iterator<ScheduledScriptEvent> i = this.scheduledEvents.iterator();
         while (i.hasNext()) {
             ScheduledScriptEvent event = i.next();

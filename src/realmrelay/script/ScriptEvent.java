@@ -180,7 +180,7 @@ public class ScriptEvent {
     }
 
     /**
-     * Returns true if connected to remote host
+     * Checks if the relay is connected to the remote host.
      * 
      * @return
      */
@@ -204,7 +204,7 @@ public class ScriptEvent {
     }
 
     /**
-     * Sends packet to client
+     * Dispatches a packet to the client.
      * 
      * @param packet
      * @throws IOException
@@ -212,7 +212,7 @@ public class ScriptEvent {
     public void sendToClient(Packet packet) throws IOException {
         byte[] packetBytes = packet.getBytes();
         this.user.localSendRC4.cipher(packetBytes);
-        byte packetId = packet.id();
+        byte packetId = packet.getId();
         int packetLength = packetBytes.length + 5;
         DataOutputStream out = new DataOutputStream(
                 user.localSocket.getOutputStream());
@@ -222,7 +222,7 @@ public class ScriptEvent {
     }
 
     /**
-     * Sends packet to server
+     * Dispatches a packet to the server.
      * 
      * @param packet
      * @throws IOException
@@ -230,10 +230,9 @@ public class ScriptEvent {
     public void sendToServer(Packet packet) throws IOException {
         byte[] packetBytes = packet.getBytes();
         this.user.remoteSendRC4.cipher(packetBytes);
-        byte packetId = packet.id();
+        byte packetId = packet.getId();
         int packetLength = packetBytes.length + 5;
-        DataOutputStream out = new DataOutputStream(
-                user.remoteSocket.getOutputStream());
+        DataOutputStream out = new DataOutputStream(user.remoteSocket.getOutputStream());
         out.writeInt(packetLength);
         out.writeByte(packetId);
         out.write(packetBytes);

@@ -20,7 +20,7 @@ public abstract class Packet implements IData {
     private static final List<Class<? extends Packet>> packetIdtoClassMap = new ArrayList<Class<? extends Packet>>(127);
 
     public static void init() {
-        for (int i = 0; i < 127; i++) packetIdtoClassMap.add(null);
+        for (int i = 0; i < 127; i++) Packet.packetIdtoClassMap.add(null);
         List<Class<? extends Packet>> list = new LinkedList<Class<? extends Packet>>();
 
         list.add(AcceptTradePacket.class);
@@ -98,8 +98,8 @@ public abstract class Packet implements IData {
         try {
             for (Class<? extends Packet> packetClass: list) {
                 Packet packet = (Packet) packetClass.newInstance();
-                RealmRelay.echo("Mapping: " + packet.getName() + " -> " + packet.id());
-                packetIdtoClassMap.set(packet.id(), packetClass);
+                RealmRelay.echo("Mapping: " + packet.getTypeName() + " -> " + packet.getId());
+                packetIdtoClassMap.set(packet.getId(), packetClass);
             }
             
             for (Entry<String, Integer> entry : XmlParser.packetMap.entrySet()) {
@@ -113,7 +113,8 @@ public abstract class Packet implements IData {
     }
 
     /**
-     * Creates new packet from packet id
+     * Constructs a new packet from the provided packet id.
+     * 
      * @param id
      * @return
      * @throws Exception 
@@ -130,14 +131,15 @@ public abstract class Packet implements IData {
     }
 
     /**
-     * Creates new packet from packet id and packet bytes
+     * Constructs a new packet from the provided packet id and bytes.
+     * 
      * @param id
      * @param bytes
      * @return
      * @throws IOException
      */
     public static Packet create(byte id, byte[] bytes) throws Exception {
-        Packet packet = create(id);
+        Packet packet = Packet.create(id);
         packet.parseFromInput(new DataInputStream(new ByteArrayInputStream(bytes)));
         int byteLength = packet.getBytes().length;
         if (byteLength != bytes.length) {
@@ -149,18 +151,18 @@ public abstract class Packet implements IData {
     public byte[] getBytes() throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         DataOutputStream out = new DataOutputStream(baos);
-        writeToOutput(out);
+        this.writeToOutput(out);
         return baos.toByteArray();
     }
 
-    public String getName() {
-        String simpleName = getClass().getSimpleName();
+    private String getTypeName() {
+        String simpleName = this.getClass().getSimpleName();
         simpleName = simpleName.substring(0, simpleName.indexOf("Packet"));
         return simpleName.toUpperCase();
     }
 
-    public byte id() {
-        String name = getName();
+    public byte getId() {
+        String name = this.getTypeName();
         Integer id = (Integer) XmlParser.packetMap.get(name);
         if (id == null) return -1;
         return id.byteValue();
@@ -168,6 +170,6 @@ public abstract class Packet implements IData {
 
     @Override
     public String toString() {
-        return getName();
+        return this.getTypeName();
     }
 }

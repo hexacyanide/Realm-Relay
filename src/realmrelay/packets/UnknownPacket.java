@@ -11,7 +11,7 @@ public class UnknownPacket extends Packet {
     private final List<Byte> bytes = new LinkedList<Byte>();
 
     @Override
-    public byte id() {
+    public byte getId() {
         return this.id;
     }
 
