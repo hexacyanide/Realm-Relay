@@ -10,11 +10,8 @@ import realmrelay.packets.Packet;
 import realmrelay.script.PacketScriptEvent;
 import realmrelay.script.ScriptManager;
 
-
 public class User {
-	
 	private static final int bufferLength = 65536 * 8;
-	
 	public final byte[] localBuffer = new byte[bufferLength];
 	public int localBufferIndex = 0;
 	public final RC4 localRecvRC4;
@@ -34,10 +31,10 @@ public class User {
 			throw new NullPointerException();
 		}
 		this.localSocket = localSocket;
-		this.localRecvRC4 = new RC4(ROTMGRelay.instance.key0);
-		this.localSendRC4 = new RC4(ROTMGRelay.instance.key1);
-		this.remoteRecvRC4 = new RC4(ROTMGRelay.instance.key1);
-		this.remoteSendRC4 = new RC4(ROTMGRelay.instance.key0);
+		this.localRecvRC4 = new RC4(RealmRelay.instance.key0);
+		this.localSendRC4 = new RC4(RealmRelay.instance.key1);
+		this.remoteRecvRC4 = new RC4(RealmRelay.instance.key1);
+		this.remoteSendRC4 = new RC4(RealmRelay.instance.key0);
 	}
 	
 	public void disconnect() {
@@ -140,7 +137,7 @@ public class User {
 				e.printStackTrace();
 			}
 			this.kick();
-			ROTMGRelay.echo("Disconnected " + this.localSocket);
+			RealmRelay.echo("Disconnected " + this.localSocket);
 		}
 	}
 

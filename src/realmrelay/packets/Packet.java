@@ -10,8 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import realmrelay.GETXmlParse;
-import realmrelay.ROTMGRelay;
+import realmrelay.XmlParser;
+import realmrelay.RealmRelay;
 import realmrelay.data.IData;
 import realmrelay.packets.client.*;
 import realmrelay.packets.server.*;
@@ -101,14 +101,14 @@ public abstract class Packet implements IData {
 		try {
 			for (Class<? extends Packet> packetClass: list) {
 				Packet packet = packetClass.newInstance();
-				ROTMGRelay.echo("Mapping: " + packet.getName() + " -> " + packet.id());
+				RealmRelay.echo("Mapping: " + packet.getName() + " -> " + packet.id());
 				packetIdtoClassMap.set(packet.id(), packetClass);
 			}
-			for (Entry<String, Integer> entry: GETXmlParse.packetMap.entrySet()) {
+			for (Entry<String, Integer> entry: XmlParser.packetMap.entrySet()) {
 				byte id = entry.getValue().byteValue();
 				Packet packet = Packet.create(id);
 				if (packet instanceof UnknownPacket) {
-					ROTMGRelay.echo("Not mapped: " + entry.getKey() + " -> " + id);
+				    RealmRelay.echo("Not mapped: " + entry.getKey() + " -> " + id);
 				}
 			}
 		} catch (Exception e) {
@@ -145,7 +145,7 @@ public abstract class Packet implements IData {
 		packet.parseFromInput(new DataInputStream(new ByteArrayInputStream(bytes)));
 		int byteLength = packet.getBytes().length;
 		if (byteLength != bytes.length) {
-			ROTMGRelay.echo(packet + " byte length is " + byteLength + " after parsing, but was " + bytes.length + " before parsing. Try updating your packets.xml");
+		    RealmRelay.echo(packet + " byte length is " + byteLength + " after parsing, but was " + bytes.length + " before parsing. Try updating your packets.xml");
 		}
 		return packet;
 	}
@@ -165,7 +165,7 @@ public abstract class Packet implements IData {
 	
 	public byte id() {
 		String name = this.getName();
-		Integer id = (Integer) GETXmlParse.packetMap.get(name);
+		Integer id = (Integer) XmlParser.packetMap.get(name);
 		if (id == null) {
 			return -1;
 		}
