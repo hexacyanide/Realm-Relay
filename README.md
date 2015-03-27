@@ -2,11 +2,7 @@ Realm Relay
 ===========
 
 A relay server, written in Java, designed for constructing and modifying Realm
-of the Mad God packets.
-
-Realm Relay v1.1.0 Script Documentation
-designed for ROTMG v17.3+
-
+of the Mad God packets. Currently compatible with game client v27.3.1.
 
 General Information
 -------------------
