@@ -171,6 +171,10 @@ public class ScriptEvent {
         return RealmRelay.instance.getGlobal(var);
     }
 
+    public String getRemoteAddress() {
+        return this.user.remoteSocket.getInetAddress().getHostAddress();
+    }
+
     public String getRemoteHost() {
         return this.user.remoteSocket.getInetAddress().getHostName();
     }
@@ -244,5 +248,9 @@ public class ScriptEvent {
 
     public void setGlobal(String var, Object value) {
         RealmRelay.instance.setGlobal(var, value);
+    }
+
+    public void removeGlobal(String var) {
+        RealmRelay.instance.removeGlobal(var);
     }
 }

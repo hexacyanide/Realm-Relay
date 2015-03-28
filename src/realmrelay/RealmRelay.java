@@ -148,6 +148,10 @@ public final class RealmRelay {
         this.gameIdSocketAddressMap.put(gameId, socketAddress);
     }
 
+    public void removeGlobal(String var) {
+        this.globalVarMap.remove(var);
+    }
+
     public static void main(String[] args) {
         try {
             XmlParser.parseXMLData();

@@ -51,7 +51,7 @@ public class ScriptManager {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (ScriptException e) {
-                RealmRelay.error(e.getMessage() + " in " + file.getName());
+                RealmRelay.error(e.getMessage());
             }
             this.scripts.add((Invocable) scriptEngine);
         }
